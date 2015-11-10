@@ -87,6 +87,8 @@ restrictions:
 #   endif
 #   undef _OISExport
 #   define _OISExport __attribute__((visibility("default")))
+#elif defined(__S3E__)
+#	define OIS_MARMALADE_PLATFORM
 #else //Probably Linux
 #	define OIS_LINUX_PLATFORM
 #	include <unistd.h>

@@ -1,0 +1,32 @@
+option lib
+subproject ois
+
+options
+{
+	enable-exceptions
+}
+
+#subprojects
+#{
+#	s3eTouchpad
+#}
+
+files
+{
+	(../src)
+	["src"]
+	OISEffect.cpp
+	OISException.cpp
+	OISForceFeedback.cpp
+	OISInputManager.cpp
+	OISJoyStick.cpp
+	OISKeyboard.cpp
+	OISObject.cpp
+	
+	(../src/Marmalade)
+	["src","Marmalade"]
+	MarmaladeAccelerometer.cpp
+	MarmaladeInputManager.cpp
+	MarmaladeKeyboard.cpp
+	MarmaladeMultiTouch.cpp
+}

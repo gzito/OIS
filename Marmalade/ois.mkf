@@ -1,0 +1,38 @@
+library
+{
+	".,ois"
+}
+
+includepaths
+{
+	../includes
+}
+
+files
+{
+	(../includes)
+	["include"]
+	OIS.h
+	OISConfig.h
+	OISEffect.h
+	OISEvents.h
+	OISException.h
+	OISFactoryCreator.h
+	OISForceFeedback.h
+	OISInputManager.h
+	OISInterface.h
+	OISJoyStick.h
+	OISKeyboard.h
+	OISMouse.h
+	OISMultiTouch.h
+	OISObject.h
+	OISPrereqs.h
+	
+	(../includes/Marmalade)
+	["include", "Marmalade"]
+	MarmaladeAccelerometer.h
+	MarmaladeInputManager.h
+	MarmaladeKeyboard.h
+	MarmaladeMultiTouch.h
+	MarmaladePrereqs.h
+}

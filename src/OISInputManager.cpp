@@ -40,6 +40,8 @@ restrictions:
 #  include "iphone/iPhoneInputManager.h"
 #elif defined OIS_XBOX_PLATFORM
 #  include "xbox/XBoxInputManager.h"
+#elif defined OIS_MARMALADE_PLATFORM
+#	include "marmalade/MarmaladeInputManager.h"
 #endif
 
 //Bring in extra controls
@@ -116,6 +118,8 @@ InputManager* InputManager::createInputSystem( ParamList &paramList )
 	im = new MacInputManager();
 #elif defined OIS_IPHONE_PLATFORM
 	im = new iPhoneInputManager();
+#elif defined OIS_MARMALADE_PLATFORM
+	im = new MarmaladeInputManager() ;
 #else
 	OIS_EXCEPT(E_General, "No platform library.. check build platform defines!");
 #endif

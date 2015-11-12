@@ -21,7 +21,6 @@ restrictions:
 
     3. This notice may not be removed or altered from any source distribution.
 */
-
 #include "Marmalade/MarmaladeAccelerometer.h"
 #include "Marmalade/MarmaladeInputManager.h"
 #include "Marmalade/MarmaladePrereqs.h"
@@ -71,7 +70,7 @@ void MarmaladeAccelerometer::capture()
 	mState.mVectors[0].z = (float)s3eAccelerometerGetZ();
 	
 	if(mListener && mBuffered)
-        mListener->axisMoved(JoyStickEvent(this, mState), 0);
+        mListener->vector3Moved(JoyStickEvent(this, mState), 0);
 }
 
 bool MarmaladeAccelerometer::_isSupported()

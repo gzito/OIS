@@ -21,12 +21,13 @@ restrictions:
 
     3. This notice may not be removed or altered from any source distribution.
 */
-
 #include "Marmalade/MarmaladeInputManager.h"
 //#include "Marmalade/MarmaladeCompass.h"
 //#include "Marmalade/MarmaladeTouchPad.h"
 #include "Marmalade/MarmaladeMultiTouch.h"
 #include "Marmalade/MarmaladeAccelerometer.h"
+#include "Marmalade/MarmaladeKeyboard.h"
+#include "Marmalade/MarmaladeMouse.h"
 #include "OISException.h"
 
 namespace OIS
@@ -36,6 +37,7 @@ namespace OIS
 MarmaladeInputManager::MarmaladeInputManager() : InputManager("MarmaladeInputManager")
 {
 	//Setup our internal factories
+	bKeyboardUsed = bMouseUsed = bAccelerometerUsed = bMultiTouchUsed = false;
 	mFactories.push_back(this);
 }
 
@@ -69,6 +71,12 @@ DeviceList MarmaladeInputManager::freeDeviceList()
 {
 	DeviceList ret;
 
+	if( bKeyboardUsed == false )
+		ret.insert(std::make_pair(OISKeyboard, mInputSystemName));
+
+	if( bMouseUsed == false )
+		ret.insert(std::make_pair(OISMouse, mInputSystemName));
+
 	if( bAccelerometerSupported == true && bAccelerometerUsed == false )
 		ret.insert(std::make_pair(OISJoyStick, mInputSystemName));
 
@@ -89,7 +97,8 @@ int MarmaladeInputManager::totalDevices(Type iType)
 {
 	switch(iType)
 	{
-	//case OISKeyboard: return 1;
+	case OISKeyboard: return 1;
+	case OISMouse: return 1;
 	case OISMultiTouch: return bMultiTouchSupported ? 1 : 0;
 	case OISJoyStick: return bAccelerometerSupported ? 1 : 0;
 // 	case OISCompass: return bCompassSupported ? 1 : 0;
@@ -103,7 +112,8 @@ int MarmaladeInputManager::freeDevices(Type iType)
 {
 	switch(iType)
 	{
-	//case OISKeyboard: return keyboardUsed ? 0 : 1;
+	case OISKeyboard: return bKeyboardUsed ? 0 : 1;
+	case OISMouse: return bMouseUsed ? 0 : 1;
 	case OISMultiTouch: return bMultiTouchUsed ? 0 : 1;
 	case OISJoyStick: return bAccelerometerUsed ? 0 : 1;
 // 	case OISCompass: return bCompassUsed ? 0 : 1;
@@ -115,7 +125,8 @@ int MarmaladeInputManager::freeDevices(Type iType)
 //----------------------------------------------------------------------------//
 bool MarmaladeInputManager::vendorExist(Type iType, const std::string & vendor)
 {
-	if( ( iType == OISMultiTouch || iType == OISJoyStick /*|| iType == OISCompass || iType == OISTouchPad*/) 
+	if( ( iType == OISMultiTouch || iType == OISJoyStick || iType == OISKeyboard || iType == OISMouse
+		/*|| iType == OISCompass || iType == OISTouchPad*/) 
 		&& vendor == mInputSystemName )
 		return true;
 
@@ -129,13 +140,16 @@ Object* MarmaladeInputManager::createObject(InputManager* creator, Type iType, b
 
 	switch(iType)
 	{
-	/*
 	case OISKeyboard: 
 	{
-		
+		obj = new MarmaladeKeyboard(this,bufferMode)	;
 		break;
 	}
-	*/
+	case OISMouse: 
+	{
+		obj = new MarmaladeMouse(this,bufferMode)	;
+		break;
+	}
 	case OISMultiTouch:
 	{
 		if( bMultiTouchSupported == true && bMultiTouchUsed == false )
@@ -184,6 +198,31 @@ case OISTouchPad:
 void MarmaladeInputManager::destroyObject(Object* obj)
 {
 	delete obj;
+}
+
+//----------------------------------------------------------------------------//
+int32 MarmaladeInputManager::_pointerButtonCallback(s3ePointerEvent* systemData, MarmaladeMouse* mouseObject)
+{
+	if(mouseObject)
+	{
+		if(systemData->m_Pressed)
+			mouseObject->_mousePressed(systemData);
+		else
+			mouseObject->_mouseReleased(systemData);
+	}
+
+	return 0;
+}
+
+//----------------------------------------------------------------------------//
+int32 MarmaladeInputManager::_pointerMotionCallback(s3ePointerMotionEvent* systemData, MarmaladeMouse* mouseObject)
+{
+	if(mouseObject)
+	{
+		mouseObject->_mouseMoved(systemData);
+	}
+
+	return 0;
 }
 
 //----------------------------------------------------------------------------//

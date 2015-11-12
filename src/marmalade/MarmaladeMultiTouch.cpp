@@ -21,7 +21,6 @@ restrictions:
 
     3. This notice may not be removed or altered from any source distribution.
 */
-
 #include "Marmalade/MarmaladeMultiTouch.h"
 #include "Marmalade/MarmaladeInputManager.h"
 
@@ -66,19 +65,19 @@ void MarmaladeMultiTouch::_touchBegan(s3ePointerTouchEvent *touch)
 	// Record touch (for touchMoved event)
 	mTouchHistory[touch->m_TouchID] = LastTouch(touch->m_x, touch->m_y);
 
-    MultiTouchState newState;
-    newState.X.abs = touch->m_x;
-    newState.Y.abs = touch->m_y;
-    newState.touchType |= 1 << MT_Pressed;
+	MultiTouchState newState;
+	newState.X.abs = touch->m_x;
+	newState.Y.abs = touch->m_y;
+	newState.touchType |= 1 << MT_Pressed;
 
-    if( mListener && mBuffered )
-    {
-        mListener->touchPressed(MultiTouchEvent(this, newState));
-    }
-    else
-    {
-        mStates.push_back(newState);
-    }
+	if( mListener && mBuffered )
+	{
+		mListener->touchPressed(MultiTouchEvent(this, newState));
+	}
+	else
+	{
+		mStates.push_back(newState);
+	}
 }
 
 void MarmaladeMultiTouch::_touchEnded(s3ePointerTouchEvent *touch)

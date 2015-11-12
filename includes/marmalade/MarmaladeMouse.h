@@ -11,46 +11,61 @@ Permission is granted to anyone to use this software for any purpose, including 
 applications, and to alter it and redistribute it freely, subject to the following
 restrictions:
 
-    1. The origin of this software must not be misrepresented; you must not claim that
+	1. The origin of this software must not be misrepresented; you must not claim that
 		you wrote the original software. If you use this software in a product,
 		an acknowledgment in the product documentation would be appreciated but is
 		not required.
 
-    2. Altered source versions must be plainly marked as such, and must not be
+	2. Altered source versions must be plainly marked as such, and must not be
 		misrepresented as being the original software.
 
-    3. This notice may not be removed or altered from any source distribution.
+	3. This notice may not be removed or altered from any source distribution.
 */
-#ifndef OIS_MarmaladeAccelerometer_H
-#define OIS_MarmaladeAccelerometer_H
+#ifndef _OIS_MarmaladeMouse_H
+#define _OIS_MarmaladeMouse_H
 
-#include <OISJoyStick.h>
+#include "OISMouse.h"
+#include "marmalade/MarmaladePrereqs.h"
 
 namespace OIS
 {
-	class MarmaladeAccelerometer : public JoyStick
+	class MarmaladeMouse : public Mouse
 	{
 		friend class MarmaladeInputManager ;
 
 	public:
-		MarmaladeAccelerometer(InputManager* creator, bool buffered);
-		~MarmaladeAccelerometer();
-		
+		MarmaladeMouse( InputManager* creator, bool buffered );
+		virtual ~MarmaladeMouse();
+
 		/** @copydoc Object::setBuffered */
 		virtual void setBuffered(bool buffered);
-		
+
 		/** @copydoc Object::capture */
 		virtual void capture();
 
 		/** @copydoc Object::queryInterface */
-		virtual Interface* queryInterface(Interface::IType type) { return 0; }
+		virtual Interface* queryInterface(Interface::IType type) { OIS_UNUSED(type); return 0;}
 
 		/** @copydoc Object::_initialize */
 		virtual void _initialize();
-		
-		//! 
-		static bool _isSupported();
+
+	protected:
+		void _mousePressed(s3ePointerEvent *touch);
+		void _mouseReleased(s3ePointerEvent *touch);
+		void _mouseMoved(s3ePointerMotionEvent *touch);
+
+	protected:
+		struct LastPos
+		{
+			int32 x;
+			int32 y;
+
+			LastPos() : x(0), y(0) {}
+			LastPos(int32 x_, int32 y_) : x(x_), y(y_) {}
+		};
+
+		LastPos mPosHistory ;
 	};
 }
 
-#endif	// OIS_MarmaladeAccelerometer_H
+#endif //_OIS_MarmaladeMouse_H

@@ -33,6 +33,7 @@ files
 	MarmaladeAccelerometer.h
 	MarmaladeInputManager.h
 	MarmaladeKeyboard.h
+	MarmaladeMouse.h
 	MarmaladeMultiTouch.h
 	MarmaladePrereqs.h
 }

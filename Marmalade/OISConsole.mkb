@@ -1,0 +1,14 @@
+options
+{
+	enable-exceptions
+}
+
+subprojects
+{
+	ois
+}
+
+files
+{
+	../demos/OISConsole.cpp
+}

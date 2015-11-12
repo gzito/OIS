@@ -21,7 +21,6 @@ restrictions:
 
     3. This notice may not be removed or altered from any source distribution.
 */
-
 #include "Marmalade/MarmaladeKeyboard.h"
 #include "Marmalade/MarmaladeInputManager.h"
 #include "OISException.h"
@@ -37,6 +36,8 @@ MarmaladeKeyboard::MarmaladeKeyboard( InputManager* creator, bool buffered )
 {
 	mType = OISKeyboard;
 	setBuffered( buffered );
+	MarmaladeInputManager *man = static_cast<MarmaladeInputManager*>(mCreator);
+	man->_setKeyboardUsed(true);
 }
 
 //-------------------------------------------------------------------//
@@ -263,6 +264,8 @@ void MarmaladeKeyboard::createInverseKeyMap()
 //-------------------------------------------------------------------//
 MarmaladeKeyboard::~MarmaladeKeyboard()
 {
+	MarmaladeInputManager *man = static_cast<MarmaladeInputManager*>(mCreator);
+	man->_setKeyboardUsed(false);
 }
 
 //-------------------------------------------------------------------//
@@ -302,24 +305,10 @@ void MarmaladeKeyboard::capture()
 	if( keyLeftAltState == S3E_KEY_STATE_UP || keyLeftAltState == S3E_KEY_STATE_RELEASED ||
 		keyRightAltState == S3E_KEY_STATE_UP || keyRightAltState == S3E_KEY_STATE_RELEASED )
 		mModifiers &= ~Alt ;
-
-	if( mBuffered && mListener && mBufferedKey ) {
-		KeyMap::iterator it = mKeyMap.find(mBufferedKey) ;
-		if( it != mKeyMap.end() ) {
-			if( mBufferedKeyState ) {
-				ret = mListener->keyPressed( KeyEvent( this, it->second, s3eKeyboardGetChar() ) );
-				while( s3eKeyboardGetChar()!=S3E_WEOF ) ; // consume pending characters
-			}
-			else {
-				ret = mListener->keyReleased( KeyEvent( this, it->second, 0) ) ;
-			}
-		}
-		mBufferedKey = s3eKeyFirst ;		// invalid key
-	}
 }
 
 //-------------------------------------------------------------------//
-bool MarmaladeKeyboard::isKeyDown( KeyCode key )
+bool MarmaladeKeyboard::isKeyDown( KeyCode key ) const 
 {
 	InverseKeyMap::const_iterator it = mInverseKeyMap.find(key) ;
 	if( it == mInverseKeyMap.end() ) {
@@ -400,18 +389,38 @@ const std::string& MarmaladeKeyboard::getAsString( KeyCode kc )
 	return mGetString;
 }
 
+
+OIS::KeyCode MarmaladeKeyboard::getAsKeyCode( std::string str )
+{
+	/*TODO: Unimplemented */;
+	return KC_UNASSIGNED ;
+}
+
 //-------------------------------------------------------------------//
-void MarmaladeKeyboard::copyKeyStates( char keys[256] )
+void MarmaladeKeyboard::copyKeyStates( char keys[256] ) const 
 {
 	// empty method
 }
 
-int32 MarmaladeKeyboard::handler(void* sys, void* userData)
+// S3E_KEYBOARD_KEY_EVENT callback
+int32 MarmaladeKeyboard::keyboardKeyEventHandler(void* sys, void* userData)
 {
-	MarmaladeKeyboard* keyboard = (MarmaladeKeyboard*)userData ;
 	s3eKeyboardEvent* kEvent = (s3eKeyboardEvent*)sys;
-	keyboard->mBufferedKey = kEvent->m_Key ;
-	keyboard->mBufferedKeyState = kEvent->m_Pressed ;
+	MarmaladeKeyboard* keyboard = (MarmaladeKeyboard*)userData ;
+
+	if( keyboard->mListener ) {
+		KeyCode kc = keyboard->mKeyMap[kEvent->m_Key] ;
+
+		bool ret ;
+
+		// keycode to virtual code translation is not supported in Marmalade, so we'll always pass 0 as 'txt' in KeyEvent
+		if( kEvent->m_Pressed ) {
+			ret = keyboard->mListener->keyPressed( KeyEvent( keyboard, kc, 0 ) );
+		}
+		else {
+			ret = keyboard->mListener->keyReleased( KeyEvent( keyboard, kc, 0) ) ;
+		}
+	}
 
 	return 0 ;
 }
@@ -420,12 +429,12 @@ int32 MarmaladeKeyboard::handler(void* sys, void* userData)
 void MarmaladeKeyboard::setBuffered(bool buffered)
 {
 	mBuffered = buffered;
-	if( buffered ) {
-		s3eKeyboardRegister( S3E_KEYBOARD_KEY_EVENT, handler, this ) ;
-	}
-	else {
-		s3eKeyboardUnRegister( S3E_KEYBOARD_KEY_EVENT, handler ) ;
-	}
+ 	if( buffered ) {
+ 		s3eKeyboardRegister( S3E_KEYBOARD_KEY_EVENT, keyboardKeyEventHandler, this ) ;
+ 	}
+ 	else {
+ 		s3eKeyboardUnRegister( S3E_KEYBOARD_KEY_EVENT, keyboardKeyEventHandler ) ;
+ 	}
 }
 
 //-------------------------------------------------------------------//

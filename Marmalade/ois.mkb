@@ -28,5 +28,6 @@ files
 	MarmaladeAccelerometer.cpp
 	MarmaladeInputManager.cpp
 	MarmaladeKeyboard.cpp
+	MarmaladeMouse.cpp
 	MarmaladeMultiTouch.cpp
 }

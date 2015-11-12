@@ -21,7 +21,6 @@ restrictions:
 
     3. This notice may not be removed or altered from any source distribution.
 */
-
 #ifndef OIS_MarmaladeInputManager_H
 #define OIS_MarmaladeInputManager_H
 
@@ -33,6 +32,7 @@ namespace OIS
 {
 	class MarmaladeTouchPad ;
 	class MarmaladeMultiTouch ;
+	class MarmaladeMouse ;
 
 
 	/**	MarmaladeInputManager specialization - Using S3E platform */
@@ -67,6 +67,10 @@ namespace OIS
 		
 		//Internal Items
 		
+		void _setKeyboardUsed(bool used) { bKeyboardUsed = used; }
+
+		void _setMouseUsed(bool used) { bMouseUsed = used; }
+
 		//! Internal method, used for flagging multi-touch as available/unavailable for creation
 		void _setMultiTouchUsed(bool used) { bMultiTouchUsed = used; }
 
@@ -82,13 +86,18 @@ namespace OIS
 		//! Callbacks
 		static int32 _touchCallback(s3ePointerTouchEvent* systemData, MarmaladeMultiTouch* touchObject);
 		static int32 _touchMotionCallback(s3ePointerTouchMotionEvent* systemData, MarmaladeMultiTouch* touchObject);
-//		static int32 _touchPadCallback(s3eTouchpadEvent* systemData, MarmaladeTouchPad* touchPad);
+		static int32 _pointerButtonCallback(s3ePointerEvent* systemData, MarmaladeMouse* mouseObject);
+		static int32 _pointerMotionCallback(s3ePointerMotionEvent* systemData, MarmaladeMouse* mouseObject);
+		//		static int32 _touchPadCallback(s3eTouchpadEvent* systemData, MarmaladeTouchPad* touchPad);
 //		static int32 _touchPadMotionCallback(s3eTouchpadMotionEvent* systemData, MarmaladeTouchPad* touchPad);
 		
 	protected:
 		//! internal class method for dealing with param list
 		void _parseConfigSettings( ParamList &paramList );
+		bool bKeyboardUsed ;
 
+		bool bMouseUsed ;
+		
 		//! Used to know if we support multitouch
 		bool bMultiTouchSupported;
 		bool bMultiTouchUsed;

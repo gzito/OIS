@@ -21,7 +21,6 @@ restrictions:
 
     3. This notice may not be removed or altered from any source distribution.
 */
-
 #ifndef _OIS_MarmaladeKeyboard_H
 #define _OIS_MarmaladeKeyboard_H
 
@@ -43,13 +42,16 @@ namespace OIS
 		virtual ~MarmaladeKeyboard();
 
 		/** @copydoc Keyboard::isKeyDown */
-		virtual bool isKeyDown( KeyCode key );
+		virtual bool isKeyDown( KeyCode key ) const ;
 
 		/** @copydoc Keyboard::getAsString */
 		virtual const std::string& getAsString( KeyCode kc );
 
+		/** @copydoc Keyboard::getAsKeyCode */
+		virtual OIS::KeyCode getAsKeyCode(std::string str) ;
+
 		/** @copydoc Keyboard::copyKeyStates */
-		virtual void copyKeyStates( char keys[256] );
+		virtual void copyKeyStates( char keys[256] ) const ;
 
 		/** @copydoc Object::setBuffered */
 		virtual void setBuffered(bool buffered);
@@ -71,11 +73,7 @@ namespace OIS
 		void createKeyMap();
 		void createInverseKeyMap() ;
 		
-		static int32 handler(void* sys, void*);
-
-	protected:
-		s3eKey mBufferedKey ;			// Buffered key
-		uint32 mBufferedKeyState ;		// Pressed (1) or Release (0)
+		static int32 keyboardKeyEventHandler(void* sys, void*);
 
 		typedef std::map<s3eKey, KeyCode> KeyMap;
 		typedef std::map<KeyCode, s3eKey> InverseKeyMap ;

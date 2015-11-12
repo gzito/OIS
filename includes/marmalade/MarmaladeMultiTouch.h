@@ -21,7 +21,6 @@ restrictions:
 
     3. This notice may not be removed or altered from any source distribution.
 */
-
 #ifndef OIS_MarmaladeMultiTouch_H
 #define OIS_MarmaladeMultiTouch_H
 
@@ -31,7 +30,9 @@ restrictions:
 namespace OIS
 {
 	class MarmaladeMultiTouch : public MultiTouch
-    {
+   {
+		friend class MarmaladeInputManager ;
+
 	public:
 		MarmaladeMultiTouch( InputManager* creator, bool buffered );
 		virtual ~MarmaladeMultiTouch();
@@ -48,6 +49,7 @@ namespace OIS
 		/** @copydoc Object::_initialize */
 		virtual void _initialize();
 
+	 protected:
         void _touchBegan(s3ePointerTouchEvent *touch);
         void _touchEnded(s3ePointerTouchEvent *touch);
         void _touchMoved(s3ePointerTouchMotionEvent *touch);

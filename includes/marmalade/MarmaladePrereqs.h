@@ -21,7 +21,6 @@ restrictions:
 
     3. This notice may not be removed or altered from any source distribution.
 */
-
 #ifndef OIS_Marmalade_Prereqs_H
 #define OIS_Marmalade_Prereqs_H
 

@@ -33,6 +33,8 @@ void checkX11Events();
 #elif defined OIS_APPLE_PLATFORM
 #include <Carbon/Carbon.h>
 void checkMacEvents();
+#elif defined OIS_MARMALADE_PLATFORM
+#include <s3e.h>
 #endif
 //////////////////////////////////////////////////////////////////////
 using namespace OIS;
@@ -179,6 +181,10 @@ int main()
             #elif defined OIS_APPLE_PLATFORM
 			  checkMacEvents();
 			  usleep( 500 );
+			#elif defined OIS_MARMALADE_PLATFORM
+			  if( s3eDeviceCheckQuitRequest() )
+				  break ;
+			  s3eDeviceYield(0);
 			#endif
 
 			if( g_kb )
@@ -347,7 +353,7 @@ void doStartup()
 	//List all devices
 	DeviceList list = g_InputManager->listFreeDevices();
 	for( DeviceList::iterator i = list.begin(); i != list.end(); ++i )
-		std::cout << "\n\tDevice: " << g_DeviceType[i->first] << " Vendor: " << i->second;
+		std::cout << "\n\tDevice: " << g_DeviceType[i->first] << " Vendor: " << i->second << std::endl ;
 
 	g_kb = (Keyboard*)g_InputManager->createInputObject( OISKeyboard, true );
 	g_kb->setEventCallback( &handler );

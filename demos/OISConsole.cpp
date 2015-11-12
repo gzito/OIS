@@ -355,15 +355,20 @@ void doStartup()
 	for( DeviceList::iterator i = list.begin(); i != list.end(); ++i )
 		std::cout << "\n\tDevice: " << g_DeviceType[i->first] << " Vendor: " << i->second << std::endl ;
 
+#ifdef TEST_OIS_KEYBOARD
 	g_kb = (Keyboard*)g_InputManager->createInputObject( OISKeyboard, true );
 	g_kb->setEventCallback( &handler );
+#endif
 
+#ifdef TEST_OIS_MOUSE
 	g_m = (Mouse*)g_InputManager->createInputObject( OISMouse, true );
 	g_m->setEventCallback( &handler );
 	const MouseState &ms = g_m->getMouseState();
 	ms.width = 100;
 	ms.height = 100;
+#endif
 
+#ifdef TEST_OIS_JOYSTICK
 	try
 	{
 		//This demo uses at most 4 joysticks - use old way to create (i.e. disregard vendor)
@@ -384,6 +389,7 @@ void doStartup()
 	{
 		std::cout << "\nException raised on joystick creation: " << ex.eText << std::endl;
 	}
+#endif
 }
 
 void handleNonBufferedKeys()

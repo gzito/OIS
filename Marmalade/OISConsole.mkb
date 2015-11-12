@@ -1,3 +1,7 @@
+#define TEST_OIS_KEYBOARD
+define TEST_OIS_MOUSE
+#define TEST_OIS_JOYSTICK
+
 options
 {
 	enable-exceptions

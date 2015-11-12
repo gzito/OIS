@@ -1,18 +1,17 @@
 # OIS: Object oriented Input System
 
 Cross Platform Object Oriented Input Lib System. Meant to be very robust and
-compatiable with many systems and operating systems.
+compatible with many systems and operating systems.
 
-This is the official repository and is a continuation of the great work done by pjcast on the old sourceforge repo.
-
-## Todo
-
-- Add CMake for compiling
-- Merge pull requests/patches send in over time
-- Cleanup and remove dead-code
-- Start implementing support for new platforms and backends
+This is a fork of official repository that add Marmalade support. It is based on the work by Evandro Millian (https://github.com/evandromillian/OIS-for-Marmalade)
+Official OIS repository is at: https://github.com/wgois/OIS
 
 ## Compiling:
+Marmalade/
+	OIS.mkb - build static library
+	OISConsole.mkb - build test app
+
+	
 Win32/
 	Contains Visual Studio .Net Solution Files
 	Contains CodeBlocks project files for OIS

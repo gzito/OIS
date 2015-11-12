@@ -3,13 +3,15 @@
 Cross Platform Object Oriented Input Lib System. Meant to be very robust and
 compatible with many systems and operating systems.
 
-This is a fork of official repository that add Marmalade support. It is based on the work by Evandro Millian (https://github.com/evandromillian/OIS-for-Marmalade)
+This is a fork of official repository that add Marmalade support; it's based on the work by Evandro Millian (https://github.com/evandromillian/OIS-for-Marmalade).
+
 Official OIS repository is at: https://github.com/wgois/OIS
+
 
 ## Compiling:
 Marmalade/
-	OIS.mkb - build static library
-	OISConsole.mkb - build test app
+	- OIS.mkb: build static library
+	- OISConsole.mkb: build test app
 
 	
 Win32/
